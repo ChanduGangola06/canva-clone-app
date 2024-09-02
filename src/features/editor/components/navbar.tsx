@@ -13,6 +13,7 @@ import {
 import { Hint } from "@/components/hint";
 import { ActiveTool, Editor } from "@/features/editor/types";
 import { Logo } from "@/features/editor/components/logo";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -24,13 +25,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
-    id: string;
-    editor: Editor | undefined;
+    // id: string;
+    // editor: Editor | undefined;
     activeTool: ActiveTool;
     onChangeActiveTool: (tool: ActiveTool) => void;
 };
 
-export const Navbar = () => {
+export const Navbar = ({
+    activeTool,
+    onChangeActiveTool,
+}: NavbarProps) => {
     return (
         <nav className="w-full flex items-center p-4 h-[68px] gap-x-8 border-b lg:pl-[34px]">
             <Logo />
@@ -54,9 +58,84 @@ export const Navbar = () => {
                 </DropdownMenu>
                 <Separator orientation="vertical" className="mx-2" />
                 <Hint label="Select" side="bottom" sideOffset={10}>
-                    <Button></Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onChangeActiveTool("select")}
+                        className={cn(activeTool === "select" && "bg-gray-100")}
+                        >
+                        <MousePointerClick className="size-4" />
+                    </Button>
                 </Hint>
-
+                <Hint label="Undo" side="bottom" sideOffset={10}>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                    >
+                        <Undo2 className="size-4" />
+                    </Button>
+                </Hint>
+                <Hint label="Redo" side="bottom" sideOffset={10}>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                    >
+                        <Redo2 className="size-4" />
+                    </Button>
+                </Hint>
+                <Separator orientation="vertical" className="mx-2" />
+                <div className="ml-auto flex items-center gap-x-4">
+                    <DropdownMenu modal={false}>
+                        <DropdownMenuTrigger asChild>
+                            <Button size="sm" variant="ghost">
+                                Export
+                                <Download className="size-4 ml-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="min-w-60">
+                            <DropdownMenuItem className="flex items-center gap-x-2">
+                                <CiFileOn className="size-8" />
+                                <div>
+                                    <p>JSON</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Save for later editing
+                                    </p>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="flex items-center gap-x-2">
+                                <CiFileOn className="size-8" />
+                                <div>
+                                    <p>PNG</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Best for sharing on the web
+                                    </p>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="flex items-center gap-x-2"
+                            >
+                                <CiFileOn className="size-8" />
+                                <div>
+                                    <p>JPG</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Best for printing
+                                    </p>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                className="flex items-center gap-x-2"
+                            >
+                                <CiFileOn className="size-8" />
+                                <div>
+                                    <p>SVG</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Best for editing in vector software
+                                    </p>
+                                </div>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </div>
         </nav>
     )
